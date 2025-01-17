@@ -1,21 +1,17 @@
 pipeline {
     agent any
-    
-    tools {
-        jdk 'jdk-17'         // Nom du JDK configuré dans Jenkins
-        maven 'maven'        // Nom de Maven configuré dans Jenkins (par exemple : Maven 3.9.8)
-    }
 
     environment {
-        GITHUB_REPO = 'https://github.com/ikbel2024/StationSKI.git' // URL du dépôt
-        GITHUB_CREDENTIALS_ID = 'first-token'                      // ID des credentials GitHub
+        GITHUB_REPO = 'https://github.com/ikbel2024/StationSKI.git'
+        GITHUB_CREDENTIALS_ID = 'first-token'
+        BRANCH_NAME = 'main' // Changez cela selon votre branche par défaut
     }
 
     stages {
         stage('Clone Repository') {
             steps {
                 echo 'Cloning the repository...'
-                git credentialsId: "${GITHUB_CREDENTIALS_ID}", url: "${GITHUB_REPO}", branch: 'main'
+                git branch: "${BRANCH_NAME}", credentialsId: "${GITHUB_CREDENTIALS_ID}", url: "${GITHUB_REPO}"
             }
         }
 
