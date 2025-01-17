@@ -8,7 +8,7 @@ pipeline {
     }
 
     tools {
-        maven 'Maven3'  // Assurez-vous que 'Maven3' correspond au nom de l'outil Maven configuré dans Jenkins
+        maven 'M2_HOME'  // Assurez-vous que 'Maven3' correspond au nom de l'outil Maven configuré dans Jenkins
     }
 
     stages {
