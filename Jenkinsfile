@@ -7,6 +7,10 @@ pipeline {
         BRANCH_NAME = 'main' // Changez cela selon votre branche par défaut
     }
 
+    tools {
+        maven 'Maven3'  // Assurez-vous que 'Maven3' correspond au nom de l'outil Maven configuré dans Jenkins
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
@@ -83,4 +87,3 @@ pipeline {
         }
     }
 }
-
