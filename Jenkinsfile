@@ -1,78 +1,33 @@
 pipeline {
     agent any
 
-    environment {
-        GITHUB_REPO = 'https://github.com/ikbel2024/StationSKI.git'
-        GITHUB_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID'
-        BRANCH_NAME = 'akrem' // Changez cela selon votre branche par défaut
+    triggers {
+        // Déclenche le pipeline dès qu'un push est détecté dans le référentiel Git
+        pollSCM('H/5 * * * *') // Vérifie les changements toutes les 5 minutes
     }
 
-    tools {
-        maven 'M2_HOME'  // Assurez-vous que 'Maven3' correspond au nom de l'outil Maven configuré dans Jenkins
+    environment {
+        GIT_REPO = 'https://github.com/ikbel2024/StationSKI.git' // Référentiel Git utilisé
+        GIT_BRANCH = 'akrem' // Branche par défaut
+        GIT_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID' // ID des credentials Jenkins
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout Source Code') {
             steps {
-                echo 'Cloning the repository...'
-                git branch: "${BRANCH_NAME}", credentialsId: "${GITHUB_CREDENTIALS_ID}", url: "${GITHUB_REPO}"
+                echo 'Récupération du code source depuis le référentiel Git...'
+                git branch: "${GIT_BRANCH}", 
+                    credentialsId: "${GIT_CREDENTIALS_ID}", 
+                    url: "${GIT_REPO}"
             }
         }
 
-        stage('Build with Maven') {
+        stage('Display System Date') {
             steps {
-                echo 'Building the project with Maven...'
+                echo 'Affichage de la date système...'
                 script {
-                    // Utilise Maven déclaré dans la section tools pour exécuter le build
-                    sh 'mvn clean install'  // Exécute "mvn clean install"
-                }
-            }
-        }
-
-        stage('Run Unit Tests') {
-            steps {
-                echo 'Running unit tests...'
-                script {
-                    // Commande pour exécuter les tests Maven
-                    sh 'mvn test'
-                }
-            }
-        }
-
-        stage('Code Analysis') {
-            environment {
-                scannerHome = tool 'sonarqube' // Nom du scanner SonarQube configuré dans Jenkins
-            }
-            steps {
-                echo 'Starting code analysis with SonarQube...'
-                script {
-                    withSonarQubeEnv('sonarqube') { // SonarQube ID configuré dans Jenkins
-                        sh "${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=stationSki \
-                            -Dsonar.projectName=stationSki \
-                            -Dsonar.sources=. \
-                            -Dsonar.java.binaries=target/classes"
-                    }
-                }
-            }
-        }
-
-        stage('Package Artifact') {
-            steps {
-                echo 'Packaging the artifact...'
-                script {
-                    // Exécute la phase de packaging Maven
-                    sh 'mvn package'
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                script {
-                    // Ajoutez votre commande ou script de déploiement ici
-                    sh 'echo "Deployment steps go here!"'
+                    // Affiche la date et l'heure actuelles du système
+                    sh 'date'
                 }
             }
         }
@@ -80,10 +35,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline executed successfully!'
+            echo 'Pipeline exécuté avec succès !'
         }
         failure {
-            echo 'Pipeline failed! Check the logs for more details.'
+            echo 'Le pipeline a échoué. Consultez les journaux pour plus de détails.'
         }
     }
 }
