@@ -1,33 +1,41 @@
 pipeline {
     agent any
 
-    triggers {
-        // Déclenche le pipeline dès qu'un push est détecté dans le référentiel Git
-        pollSCM('H/5 * * * *') // Vérifie les changements toutes les 5 minutes
+    environment {
+        GIT_REPO = 'https://github.com/ikbel2024/StationSKI.git' // Référentiel Git
+        GIT_BRANCH = 'akrem' // Branche cible
+        GIT_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID' // ID des credentials Jenkins
+        MAVEN_HOME = 'M2_HOME' // Nom de l'installation Maven configurée dans Jenkins
     }
 
-    environment {
-        GIT_REPO = 'https://github.com/ikbel2024/StationSKI.git' // Référentiel Git utilisé
-        GIT_BRANCH = 'akrem' // Branche par défaut
-        GIT_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID' // ID des credentials Jenkins
+    tools {
+        maven "${MAVEN_HOME}" // Outil Maven configuré dans Jenkins
     }
 
     stages {
-        stage('Checkout Source Code') {
+        stage('Récupération du Code Source') {
             steps {
-                echo 'Récupération du code source depuis le référentiel Git...'
+                echo 'Clonage du référentiel Git...'
                 git branch: "${GIT_BRANCH}", 
                     credentialsId: "${GIT_CREDENTIALS_ID}", 
                     url: "${GIT_REPO}"
             }
         }
 
-        stage('Display System Date') {
+        stage('Compilation Maven') {
             steps {
-                echo 'Affichage de la date système...'
+                echo 'Compilation du projet avec Maven...'
                 script {
-                    // Affiche la date et l'heure actuelles du système
-                    sh 'date'
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+
+        stage('Exécution des Tests Maven') {
+            steps {
+                echo 'Exécution des tests unitaires avec Maven...'
+                script {
+                    sh 'mvn test'
                 }
             }
         }
