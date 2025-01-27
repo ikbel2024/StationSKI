@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         GITHUB_REPO = 'https://github.com/ikbel2024/StationSKI.git'
-        GITHUB_CREDENTIALS_ID = 'first-token'
-        BRANCH_NAME = 'main' // Changez cela selon votre branche par défaut
+        GITHUB_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID'
+        BRANCH_NAME = 'akrem' // Changez cela selon votre branche par défaut
     }
 
     tools {
@@ -15,7 +15,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 echo 'Cloning the repository...'
-                git branch: "${akrem}", credentialsId: "${GITHUB_CREDENTIALS_ID}", url: "${GITHUB_REPO}"
+                git branch: "${BRANCH_NAME}", credentialsId: "${GITHUB_CREDENTIALS_ID}", url: "${GITHUB_REPO}"
             }
         }
 
