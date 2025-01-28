@@ -6,47 +6,52 @@ pipeline {
         GIT_BRANCH = 'akrem' // Branche cible
         GIT_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID' // ID des credentials Jenkins
         MAVEN_HOME = 'M2_HOME' // Nom de l'installation Maven configurée dans Jenkins
-    }
-
-    tools {
-        maven "${MAVEN_HOME}" // Outil Maven configuré dans Jenkins
+        PATH = "${env.MAVEN_HOME}/bin:${env.PATH}" // Met à jour le PATH pour inclure Maven
     }
 
     stages {
-        stage('Récupération du Code Source') {
+        stage('Checkout Code') {
             steps {
-                echo 'Clonage du référentiel Git...'
-                git branch: "${GIT_BRANCH}", 
-                    credentialsId: "${GIT_CREDENTIALS_ID}", 
-                    url: "${GIT_REPO}"
+                // Clone du dépôt Git
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${env.GIT_BRANCH}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[
+                        url: "${env.GIT_REPO}",
+                        credentialsId: "${env.GIT_CREDENTIALS_ID}"
+                    ]]
+                ])
             }
         }
 
-        stage('Compilation Maven') {
+        stage('Build') {
             steps {
-                echo 'Compilation du projet avec Maven...'
-                script {
-                    sh 'mvn clean compile'
-                }
+                // Compilation avec Maven
+                sh 'mvn clean install'
             }
         }
 
-        stage('Exécution des Tests Maven') {
+        stage('Test') {
             steps {
-                echo 'Exécution des tests unitaires avec Maven...'
-                script {
-                    sh 'mvn test'
-                }
+                // Exécution des tests avec Maven
+                sh 'mvn test'
             }
         }
     }
 
     post {
-        success {
-            echo 'Pipeline exécuté avec succès !'
+        always {
+            // Archiver les artefacts de construction et les rapports de tests
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            junit 'target/surefire-reports/*.xml'
         }
         failure {
-            echo 'Le pipeline a échoué. Consultez les journaux pour plus de détails.'
+            // Notifier un échec
+            echo 'Le build ou les tests ont échoué !'
         }
     }
 }
+
