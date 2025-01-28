@@ -55,6 +55,13 @@
 		</dependency>
 	</dependencies>
 
+	<distributionManagement>
+   			 <repository>
+        	<id>nexus</id>
+       	 	<url>http://192.168.56.140:8081/repository/test/</url>
+    			</repository>
+	</distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
