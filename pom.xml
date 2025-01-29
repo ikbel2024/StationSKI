@@ -54,6 +54,12 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<repositories>
+  		<repository>
+   			 <id>nexus</id>
+   		 	<url>http://http://192.168.56.140:8081/repository/stationSki/</url>
+  		</repository>
+	</repositories>
 
 	
 
