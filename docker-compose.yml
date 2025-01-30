@@ -7,7 +7,7 @@ services:
     image: spring-app:latest  # Image Docker
     container_name: spring-app
     ports:
-      - "8087:8080"
+      - "8087:8089"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_DATASOURCE_URL=jdbc:mysql://192.168.56.140:3306/stationSki2  # Remplace 192.168.1.100 par l’IP de la VM
