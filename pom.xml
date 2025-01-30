@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>tn.esprit</groupId>
 	<artifactId>stationSki</artifactId>
-	<version>1.0</version>
+	<version>1.0.${BUILD_NUMBER}</version>
 	<name>stationSki</name>
 	<description>stationSki</description>
 	<url/>
@@ -32,6 +32,7 @@
 		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
 	<dependencies>
+
 		<!-- Spring Boot Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -52,6 +53,18 @@
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
+
+		<dependency>
+   			 <groupId>org.springframework.boot</groupId>
+    			 <artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+   			 <groupId>io.micrometer</groupId>
+   			 <artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+		
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -78,6 +91,21 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+  		<repository>
+   			 <id>nexus</id>
+   		 	<url>http://http://192.168.56.140:8081/repository/stationSki/</url>
+  		</repository>
+	</repositories>
+
+
+	<distributionManagement>
+   			 <repository>
+        	<id>nexus</id>
+       	 	<url>http://192.168.56.140:8081/repository/test/</url>
+    			</repository>
+	</distributionManagement>
 
 	<build>
 		<plugins>
