@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SkieurRestController {
     private ISkieurService iSkieurService;
-    @PostMapping
+    @PostMapping("/addSkieur")
     public Skieur addSkieur(@RequestBody Skieur skieur) {
         return iSkieurService.addSkieur(skieur);
 
