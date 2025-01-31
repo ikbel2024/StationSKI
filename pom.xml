@@ -33,12 +33,15 @@
 	</properties>
 	<dependencies>
 
+
+
 		<!-- Spring Boot Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 
 		<!-- Mockito for mocking dependencies -->
 		<dependency>
@@ -61,8 +64,9 @@
     			 <artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
-   			 <groupId>io.micrometer</groupId>
-   			 <artifactId>micrometer-registry-prometheus</artifactId>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>1.14.3</version> <!-- Use a version available in Maven Central -->
 		</dependency>
 		
 
