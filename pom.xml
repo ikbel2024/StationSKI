@@ -100,7 +100,7 @@
 	<repositories>
   		<repository>
    			 <id>nexus</id>
-   		 	<url>http://http://192.168.56.140:8081/repository/stationSki/</url>
+   		 	<url>http://http://172.17.0.1:8081/repository/stationSki/</url>
   		</repository>
 	</repositories>
 
