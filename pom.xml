@@ -97,21 +97,6 @@
 		</dependency>
 	</dependencies>
 
-	<repositories>
-  		<repository>
-   			 <id>nexus</id>
-   		 	<url>http://http://192.168.128:8081/repository/stationSki/</url>
-  		</repository>
-	</repositories>
-
-
-	<distributionManagement>
-   			 <repository>
-        	<id>nexus</id>
-       	 	<url>http://192.168.137.128:8081/repository/test/</url>
-    			</repository>
-	</distributionManagement>
-
 	<build>
 		<plugins>
 			<plugin>
