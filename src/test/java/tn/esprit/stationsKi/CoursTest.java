@@ -1,14 +1,11 @@
 package tn.esprit.stationski;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tn.esprit.stationski.entities.Cours;
-import tn.esprit.stationski.entities.Inscription;
-
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import tn.esprit.stationski.entities.TypeCours;
+import tn.esprit.stationski.entities.Support;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,35 +17,32 @@ public class CoursTest {
     @BeforeEach
     void setUp() {
         cours = new Cours();
-        cours.setNomS("Cours de Ski");
-        cours.setPrenomS("Introduction au ski");
-        cours.setDateNaissance(LocalDate.of(2023, 1, 10));
-        cours.setVille("Tunis");
-
-        Set<Inscription> inscriptions = new HashSet<>();
-        Inscription inscription1 = new Inscription();
-        inscription1.setNom("Participant 1");
-
-        Inscription inscription2 = new Inscription();
-        inscription2.setNom("Participant 2");
-
-        inscriptions.add(inscription1);
-        inscriptions.add(inscription2);
-
-        cours.setInscriptions(inscriptions);
+        cours.setNumC(1L);
+        cours.setNiveau(2);
+        cours.setTypeC(TypeCours.COLLECTIF);
+        cours.setSupport(Support.SKI);
+        cours.setPrix(150.0f);
+        cours.setCreneau(3);
     }
 
     @Test
-    void testCoursAttributes() {
-        assertEquals("Cours de Ski", cours.getNomS());
-        assertEquals("Introduction au ski", cours.getPrenomS());
-        assertEquals(LocalDate.of(2023, 1, 10), cours.getDateNaissance());
-        assertEquals("Tunis", cours.getVille());
+    public void testCoursAttributes() {
+        assertEquals(1L, cours.getNumC());
+        assertEquals(2, cours.getNiveau());
+        assertEquals(TypeCours.COLLECTIF, cours.getTypeC());
+        assertEquals(Support.SKI, cours.getSupport());
+        assertEquals(150.0f, cours.getPrix());
+        assertEquals(3, cours.getCreneau());
     }
 
     @Test
-    void testCoursInscriptions() {
-        assertNotNull(cours.getInscriptions());
-        assertEquals(2, cours.getInscriptions().size());
+    public void testModificationAttributes() {
+        cours.setNiveau(3);
+        cours.setPrix(200.0f);
+
+        assertEquals(3, cours.getNiveau());
+        assertEquals(200.0f, cours.getPrix());
     }
 }
+
+
