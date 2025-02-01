@@ -10,7 +10,7 @@ services:
       - "8087:8089"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:mysql://192.168.56.140:3306/stationSki2  # Remplace 192.168.1.100 par l’IP de la VM
+      - SPRING_DATASOURCE_URL=jdbc:mysql://172.17.0.1:3306/stationSki2  # Remplace 192.168.1.100 par l’IP de la VM
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=rootpassword
     restart: always
