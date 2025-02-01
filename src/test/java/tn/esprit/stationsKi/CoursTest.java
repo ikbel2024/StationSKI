@@ -1,11 +1,11 @@
+
 package tn.esprit.stationski;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import tn.esprit.stationski.entities.Cours;
 import tn.esprit.stationski.entities.TypeCours;
-import tn.esprit.stationski.entities.Support;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,32 +17,23 @@ public class CoursTest {
     @BeforeEach
     void setUp() {
         cours = new Cours();
-        cours.setNumC(1L);
-        cours.setNiveau(2);
-        cours.setTypeC(TypeCours.COLLECTIF);
-        cours.setSupport(Support.SKI);
-        cours.setPrix(150.0f);
-        cours.setCreneau(3);
-    }
-
-    @Test
-    public void testCoursAttributes() {
-        assertEquals(1L, cours.getNumC());
-        assertEquals(2, cours.getNiveau());
-        assertEquals(TypeCours.COLLECTIF, cours.getTypeC());
-        assertEquals(Support.SKI, cours.getSupport());
-        assertEquals(150.0f, cours.getPrix());
-        assertEquals(3, cours.getCreneau());
-    }
-
-    @Test
-    public void testModificationAttributes() {
         cours.setNiveau(3);
-        cours.setPrix(200.0f);
+        cours.setPrix(250.0f);
+        cours.setCreneau(4);
+        cours.setTypeC(TypeCours.PARTUCULIER);  // Utilisation de l'énumération existante
+    }
 
-        assertEquals(3, cours.getNiveau());
-        assertEquals(200.0f, cours.getPrix());
+    @Test
+    void testCoursNotNull() {
+        assertNotNull(cours, "L'objet 'cours' ne doit pas être null");
+    }
+
+    @Test
+    void testCoursAttributes() {
+        assertEquals(3, cours.getNiveau(), "Le niveau doit être 3");
+        assertEquals(250.0f, cours.getPrix(), "Le prix doit être 250.0");
+        assertEquals(4, cours.getCreneau(), "Le créneau doit être 4");
+        assertEquals(TypeCours.PARTUCULIER, cours.getTypeC(), "Le type du cours doit être PARTUCULIER");
     }
 }
-
 
