@@ -1,0 +1,130 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_CREDENTIALS_ID = 'docker'  // Jenkins credentials ID for Docker Hub
+        NEXUS_CREDENTIALS_ID = 'nexus1'    // Jenkins credentials ID for Nexus
+        IMAGE_NAME = 'labo-app-esprit'
+        DOCKER_HUB_REPO = "achourimarwen/digilabo-esprit"
+        IMAGE_TAG = "latest"
+        //NEXUS_URL = "http://192.168.137.128:8081"
+        SONARQUBE_URL = "http://192.168.137.128:9000"
+        //NEXUS_REPOSITORY_URL = '192.168.137.128:8082/repository/docker-hosted'
+        NEXUS_REPOSITORY_URL = '192.168.137.128:8081/repository/docker-hosted'
+        MAVEN_SETTINGS_PATH = '/var/lib/jenkins/.m2/settings.xml'
+        EMAIL_RECIPIENT = 'marwen.achouri@etudiant-isi.utm.tn'
+        GITHUB_REPO = 'https://github.com/ikbel2024/StationSKI.git'
+        GITHUB_CREDENTIALS_ID = 'github-token'
+
+    }
+    stages {
+        stage('Check JDK') {
+            steps {
+                sh 'echo $JAVA_HOME'
+                sh 'java -version'
+            }
+        }
+        stage('Checkout') {
+            steps {
+                //git branch: 'main', url: 'http://192.168.137.128/root/apprepopfe.git', credentialsId: 'GitlabApiToken'
+                checkout scmGit(branches: [[name: '*/AchouriMarwen']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-token', url: 'https://github.com/ikbel2024/StationSKI.git']])
+            }
+        }
+        stage('Tests before building') {
+            steps {
+                script {
+                    sh 'mvn test' //test unitaire
+                }
+            }
+        }
+        
+                stage('Build') {
+            steps {
+                script {
+                    sh 'mvn clean install'  // Compile le projet et génère un fichier JAR
+                }
+            }
+        }
+        
+        stage('Run SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'Sonar'
+            }
+            steps {
+                script {
+                    withSonarQubeEnv("${SONARQUBE_ENV}") {
+                        sh "${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=stationSki-esprit \
+                            -Dsonar.projectName=stationSki-esprit \
+                            -Dsonar.sources=. \
+                            -Dsonar.java.binaries=target/classes"
+                    }
+                }
+            }
+        }
+
+        stage('Docker Build and Push to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
+                        def customImage = docker.build("${DOCKER_HUB_REPO}:${IMAGE_TAG}")
+                        customImage.push()
+                    }
+                }
+            }
+        }
+        /*stage('Docker Build and Push to Nexus') {
+            steps {
+                script {
+                    docker.withRegistry("http://${NEXUS_REPOSITORY_URL}", NEXUS_CREDENTIALS_ID) {
+                        def customImage = docker.build("${NEXUS_REPOSITORY_URL}/${IMAGE_NAME}:${IMAGE_TAG}")
+                        customImage.push()
+                    }
+                }
+            }
+        }*/
+
+        
+        stage('Démarrage Containners with Docker Compose') {
+            steps {
+                script {
+                    sh '''
+                        docker-compose down  # Arrête et supprime les anciens conteneurs
+                        docker-compose up -d --build --force-recreate
+                    '''
+                }
+            }
+        }
+
+        stage('Monitoring') {
+        steps {
+            script {
+                sh 'curl -f http://192.168.137.128:9090/metrics' // Tester l'accès à l'endpoint Prometheus
+                
+                sh 'curl -f http://192.168.137.128:3000/api/health' // Tester l'accès à Grafana API
+
+                sh 'curl -f http://192.168.137.128:9090/api/v1/query?query=http_requests_total'
+            }
+        }
+    }
+    }
+
+
+        stage('API Testing') {
+            steps {
+                sh 'curl -X GET http://localhost:8080/api/health'
+            }
+        }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+    /*post {
+        failure {
+            mail to: "${EMAIL_RECIPIENT}",
+                 subject: "Pipeline Failed",
+                 body: "Check Jenkins logs for details."
+        }
+    }*/
+}
