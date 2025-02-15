@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 <modelVersion>4.0.0</modelVersion>
+
 <!-- Dépendance Spring Boot -->
 <parent>
 <groupId>org.springframework.boot</groupId>
 <artifactId>spring-boot-starter-parent</artifactId>
 <version>3.1.0</version>
+
 <!-- Version Spring Boot compatible avec Java 17 -->
 <relativePath/>
 </parent>
@@ -15,12 +17,28 @@
 <version>1.0.</version>
 <name>stationSki</name>
 <description>Station Ski - Projet de gestion</description>
+
+<licenses>
+	<license/>
+	</licenses>
+
+<developers>
+		<developer/>
+</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+
 <!-- Propriétés globales -->
 <properties>
 <java.version>17</java.version>
 <maven.compiler.source>17</maven.compiler.source>
 <maven.compiler.target>17</maven.compiler.target>
 </properties>
+
 <!-- Dépendances principales -->
 <dependencies>
 <!-- Dépendances Spring Boot -->
@@ -36,40 +54,48 @@
 <groupId>org.springframework.boot</groupId>
 <artifactId>spring-boot-starter-actuator</artifactId>
 </dependency>
+
 <!-- Connector MySQL -->
 <dependency>
 <groupId>com.mysql</groupId>
 <artifactId>mysql-connector-j</artifactId>
 <scope>runtime</scope>
 </dependency>
+
 <!-- Prometheus (Monitoring) -->
 <dependency>
 <groupId>io.micrometer</groupId>
 <artifactId>micrometer-registry-prometheus</artifactId>
 </dependency>
+
 <!-- Lombok (simplification des beans Java) -->
 <dependency>
 <groupId>org.projectlombok</groupId>
 <artifactId>lombok</artifactId>
 <optional>true</optional>
 </dependency>
+
 <!-- Dépendances pour les tests -->
 <dependency>
 <groupId>org.springframework.boot</groupId>
 <artifactId>spring-boot-starter-test</artifactId>
 <scope>test</scope>
 </dependency>
+
 <dependency>
 <groupId>org.mockito</groupId>
 <artifactId>mockito-core</artifactId>
 <scope>test</scope>
 </dependency>
+
 <dependency>
 <groupId>org.junit.jupiter</groupId>
 <artifactId>junit-jupiter-api</artifactId>
 <scope>test</scope>
 </dependency>
 </dependencies>
+
+
 <!-- Configuration de build Maven -->
 <build>
 <plugins>
@@ -81,9 +107,16 @@
 </plugins>
 </build>
 <!-- Configuration Nexus (distribution management) -->
+<repositories>
+  <repository>
+   	<id>deployementRepo</id>
+   	<url>http://http://10.0.2.15:8081/repository/stationSki/</url>
+  </repository>
+</repositories>
+
 <distributionManagement>
 <repository>
-<id>nexus</id>
+<id>deployementRepo</id>
 <url>http://10.0.2.15:8081/repository/test/</url>
 </repository>
 </distributionManagement>
