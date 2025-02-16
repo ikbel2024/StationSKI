@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  spring-app:
+    build:
+      context: .   # Build de l'image à partir du répertoire du projet
+      dockerfile: Dockerfile  # Utilise le Dockerfile du projet
+    image: spring-app:latest  # Image Docker
+    container_name: spring-app
+    ports:
+      - "8087:8089"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://10.0.2.15:3306/stationSki  # Remplace 192.168.1.100 par l’IP de la VM
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+    restart: always

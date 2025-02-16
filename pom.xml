@@ -15,6 +15,7 @@
 <groupId>tn.esprit</groupId>
 <artifactId>stationSki</artifactId>
 <version>1.0.</version>
+<packaging>jar</packaging>
 <name>stationSki</name>
 <description>Station Ski - Projet de gestion</description>
 
